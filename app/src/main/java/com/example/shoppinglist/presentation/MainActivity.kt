@@ -6,7 +6,6 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
-import com.example.shoppinglist.domain.ShopItem
 
 class MainActivity : AppCompatActivity() {
 
@@ -37,10 +36,8 @@ class MainActivity : AppCompatActivity() {
                 ShopListAdapter.MAX_POOL_SIZE
             )
         }
-        adapterShopList.onShopItemLongClickListener = object : ShopListAdapter.OnShopItemLongClickListener {
-            override fun onShopItemLongClick(shopItem: ShopItem) {
-                viewModel.editShopItem(shopItem)
-            }
+        adapterShopList.onShopItemLongClickListener = {
+            viewModel.editShopItem(it)
         }
     }
 }
