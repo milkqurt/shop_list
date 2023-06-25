@@ -10,7 +10,7 @@ import com.example.shoppinglist.R
 import com.example.shoppinglist.domain.ShopItem
 
 class ShopListAdapter :
-    ListAdapter<ShopItem, ShopListAdapter.ShopItemViewHolder>(ShopItemDiffCallback()) {
+    ListAdapter<ShopItem, ShopItemViewHolder>(ShopItemDiffCallback()) {
 
     var onShopItemLongClickListener: ((ShopItem) -> Unit)? = null
     var onShopItemClickListener: ((ShopItem) -> Unit)? = null
@@ -45,11 +45,6 @@ class ShopListAdapter :
         } else {
             VIEW_TYPE_DISABLED
         }
-    }
-
-    inner class ShopItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val tvName = view.findViewById<TextView>(R.id.tv_name)
-        val tvCount = view.findViewById<TextView>(R.id.tvCount)
     }
 
     companion object {
