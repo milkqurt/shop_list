@@ -16,14 +16,15 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
             notifyDataSetChanged()
         }
 
+    var onShopItemLongClickListener: OnShopItemLongClickListener? = null
+
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ShopItemViewHolder {
         val type = when(viewType) {
             VIEW_TYPE_ENABLED -> R.layout.item_shop_enabled
             VIEW_TYPE_DISABLED -> R.layout.item_shop_disabled
             else -> throw RuntimeException("Unknown view type $viewType")
         }
-        val view =
-            LayoutInflater.from(parent.context).inflate(type, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(type, parent, false)
         return ShopItemViewHolder(view)
     }
 
@@ -32,6 +33,7 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
         holder.tvName?.text = shopItem.name
         holder.tvCount?.text = shopItem.count.toString()
         holder.view.setOnLongClickListener {
+            onShopItemLongClickListener?.onShopItemLongClick(shopItem)
             true
         }
     }
@@ -49,6 +51,11 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
         }
     }
 
+    interface OnShopItemLongClickListener {
+
+        fun onShopItemLongClick(shopItem: ShopItem)
+    }
+
     inner class ShopItemViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
         val tvName = view.findViewById<TextView>(R.id.tv_name)
         val tvCount = view.findViewById<TextView>(R.id.tvCount)
@@ -57,6 +64,7 @@ class ShopListAdapter : RecyclerView.Adapter<ShopListAdapter.ShopItemViewHolder>
     companion object {
         const val VIEW_TYPE_ENABLED = 100
         const val VIEW_TYPE_DISABLED =  101
+        const val MAX_POOL_SIZE = 5
     }
 
 }
