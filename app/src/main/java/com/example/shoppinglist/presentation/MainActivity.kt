@@ -2,6 +2,8 @@ package com.example.shoppinglist.presentation
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentContainerView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -13,20 +15,36 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var viewModel: MainViewModel
     private lateinit var adapterShopList: ShopListAdapter
+    private var shopItemContainer: FragmentContainerView? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        shopItemContainer = findViewById(R.id.shop_item_container)
         setupRecyclerView()
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.shopList.observe(this, Observer {
             adapterShopList.submitList(it)
         })
         val buttonAddShopItem = findViewById<FloatingActionButton>(R.id.button_add_shop_item)
-        buttonAddShopItem.setOnClickListener{
-            val intent = ShopItemActivity.shopItemAddIntent(this)
-            startActivity(intent)
+        buttonAddShopItem.setOnClickListener {
+            if (isOnePaneMode()) {
+                val intent = ShopItemActivity.shopItemAddIntent(this)
+                startActivity(intent)
+            } else {
+                launchFragment(ShopItemFragment.newInstanceAddItem())
+            }
         }
+    }
+
+    private fun isOnePaneMode(): Boolean {
+        return shopItemContainer == null
+    }
+
+    private fun launchFragment(fragment: Fragment) {
+        supportFragmentManager.popBackStack()
+        supportFragmentManager.beginTransaction().add(R.id.shop_item_container, fragment)
+            .addToBackStack(null).commit()
     }
 
     private fun setupRecyclerView() {
@@ -72,8 +90,12 @@ class MainActivity : AppCompatActivity() {
             viewModel.editEnabledShopItem(it)
         }
         adapterShopList.onShopItemClickListener = {
-            val intent = ShopItemActivity.shopItemEditIntent(this, it.id)
-            startActivity(intent)
+            if (isOnePaneMode()) {
+                val intent = ShopItemActivity.shopItemEditIntent(this, it.id)
+                startActivity(intent)
+            } else {
+                launchFragment(ShopItemFragment.newInstanceEditItem(it.id))
+            }
         }
     }
 }
