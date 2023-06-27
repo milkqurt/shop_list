@@ -1,6 +1,7 @@
 package com.example.shoppinglist.presentation
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentContainerView
@@ -32,7 +33,15 @@ class MainActivity : AppCompatActivity() {
                 val intent = ShopItemActivity.shopItemAddIntent(this)
                 startActivity(intent)
             } else {
-                launchFragment(ShopItemFragment.newInstanceAddItem())
+                val fragment = ShopItemFragment.newInstanceAddItem()
+                fragment.onEditingFinishedListener = object : ShopItemFragment.OnEditingFinishedListener {
+                    override fun onEditingFinished() {
+                        Toast.makeText(this@MainActivity, "Success", Toast.LENGTH_LONG).show()
+                        supportFragmentManager.popBackStack()
+                    }
+
+                }
+                launchFragment(fragment)
             }
         }
     }
