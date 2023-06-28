@@ -12,7 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.shoppinglist.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(), ShopItemFragment.OnEditingFinishedListener{
 
     private lateinit var viewModel: MainViewModel
     private lateinit var adapterShopList: ShopListAdapter
@@ -33,15 +33,7 @@ class MainActivity : AppCompatActivity() {
                 val intent = ShopItemActivity.shopItemAddIntent(this)
                 startActivity(intent)
             } else {
-                val fragment = ShopItemFragment.newInstanceAddItem()
-                fragment.onEditingFinishedListener = object : ShopItemFragment.OnEditingFinishedListener {
-                    override fun onEditingFinished() {
-                        Toast.makeText(this@MainActivity, "Success", Toast.LENGTH_LONG).show()
-                        supportFragmentManager.popBackStack()
-                    }
-
-                }
-                launchFragment(fragment)
+                launchFragment(ShopItemFragment.newInstanceAddItem())
             }
         }
     }
@@ -106,5 +98,10 @@ class MainActivity : AppCompatActivity() {
                 launchFragment(ShopItemFragment.newInstanceEditItem(it.id))
             }
         }
+    }
+
+    override fun onEditingFinished() {
+        Toast.makeText(this@MainActivity, "Success", Toast.LENGTH_LONG).show()
+        supportFragmentManager.popBackStack()
     }
 }
