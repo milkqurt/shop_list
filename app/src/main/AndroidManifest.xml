@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <application
+        android:name=".presentation.ShopApplication"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -11,7 +12,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ShoppingList"
-        android:name=".presentation.ShopApplication"
         tools:targetApi="31">
         <activity
             android:name=".ShopItemActivity"
@@ -20,8 +20,9 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-        <activity android:name=".presentation.ShopItemActivity"
-            android:windowSoftInputMode="adjustResize"/>
+        <activity
+            android:name=".presentation.ShopItemActivity"
+            android:windowSoftInputMode="adjustResize" />
         <activity
             android:name=".presentation.MainActivity"
             android:exported="true">
@@ -34,6 +35,11 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
+
+        <provider
+            android:name=".data.ShopListProvider"
+            android:authorities="com.example.shoppinglist"
+            android:exported="true" />
     </application>
 
 </manifest>
